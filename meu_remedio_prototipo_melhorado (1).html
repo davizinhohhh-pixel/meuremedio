@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#176b57">
+<title>Meu Remédio — protótipo</title>
+<style>
+:root{--green:#176b57;--mint:#e8f4ef;--ink:#17332d;--muted:#60736d;--line:#dce8e2;--bg:#f5f8f6;--white:#fff;--orange:#a65b12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--green);color:white;padding:22px 18px 16px}header .wrap,main{max-width:760px;margin:auto}
+.brand{display:flex;align-items:center;gap:12px}.logo{font-size:30px}h1{font-size:25px;margin:0}header p{margin:5px 0 0;color:#e2f1eb;font-size:14px}
+nav{display:flex;gap:8px;max-width:760px;margin:14px auto 0;padding:0 14px}
+nav button{flex:1;border:1px solid var(--line);background:white;color:var(--green);border-radius:12px;padding:12px 7px;font-weight:700;font-size:15px}
+nav button.active{background:var(--green);color:white;border-color:var(--green)}
+main{padding:16px 14px 40px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:14px;box-shadow:0 3px 14px #18392b0a}
+h2{font-size:21px;margin:0 0 12px}h3{font-size:18px;margin:0 0 8px}
+label{display:block;font-size:14px;font-weight:700;margin:11px 0 5px;color:#36564c}
+input,select{width:100%;padding:12px;border:1px solid #b9cec4;border-radius:10px;font:inherit;background:white;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;border-radius:12px;padding:13px 16px;background:var(--green);color:white;font-weight:750;font-size:16px;cursor:pointer}.btn.secondary{background:var(--mint);color:var(--green);border:1px solid #c9e1d6}.btn.big{width:100%;font-size:23px;padding:20px;margin-top:12px}.btn:disabled{opacity:.55}
+.note{font-size:13px;color:var(--muted)}.medicine{border:1px solid var(--line);border-radius:14px;padding:13px;margin:10px 0;display:flex;gap:12px;align-items:center}
+.thumb{width:58px;height:58px;border-radius:12px;background:var(--mint);display:grid;place-items:center;font-size:27px;overflow:hidden;flex:none}.thumb img{width:100%;height:100%;object-fit:cover}
+.medinfo{flex:1;min-width:0}.medinfo strong{display:block;font-size:18px}.medinfo small{color:var(--muted)}
+.pill{display:inline-block;background:#fff2df;color:var(--orange);border-radius:30px;padding:4px 9px;font-size:12px;font-weight:700}
+.empty{text-align:center;color:var(--muted);padding:25px 10px}
+.hidden{display:none!important}.elder-card{text-align:center;padding:22px 15px}.elder-card .thumb{width:112px;height:112px;font-size:52px;margin:0 auto 12px}.elder-card h2{font-size:30px;margin:5px}.elder-card .details{font-size:20px;color:var(--muted)}.time{font-size:35px;font-weight:800;margin:12px}
+.history-row{padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:0 18px 24px}
+@media(max-width:480px){.grid{grid-template-columns:1fr}nav button{font-size:13px;padding:10px 3px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand"><div class="logo">💚</div><div><h1>Meu Remédio</h1><p>Organização simples para cuidar melhor</p></div></div></div></header>
+<nav>
+<button class="active" data-tab="family">👨‍👩‍👧 Familiar</button>
+<button data-tab="elder">🧓 Idoso</button>
+<button data-tab="history">📋 Histórico</button>
+</nav>
+<main>
+<section id="family">
+<div class="panel">
+<h2>Cadastro de medicamento</h2>
+<p class="note">Nesta demonstração, os dados ficam salvos neste navegador e neste aparelho.</p>
+<label for="person">Nome da pessoa idosa</label><input id="person" value="Minha mãe" placeholder="Ex.: Dona Maria">
+<label for="name">Nome do medicamento</label><input id="name" placeholder="Ex.: medicamento conforme receita">
+<div class="grid">
+<div><label for="color">Cor / identificação</label><input id="color" placeholder="Ex.: branco"></div>
+<div><label for="dose">Dose prescrita</label><input id="dose" placeholder="Ex.: 1 comprimido"></div>
+</div>
+<div class="grid">
+<div><label for="time">Horário</label><input id="time" type="time" value="08:00"></div>
+<div><label for="frequency">Frequência</label><select id="frequency"><option>Todos os dias</option><option>Uma vez por dia</option><option>Conforme orientação médica</option></select></div>
+</div>
+<label for="photo">Foto da caixa (opcional)</label><input id="photo" type="file" accept="image/*">
+<button class="btn" id="save" style="width:100%;margin-top:15px">＋ Salvar medicamento</button>
+<div id="savedMsg" class="note" aria-live="polite"></div>
+</div>
+<div class="panel"><h2>Medicamentos cadastrados</h2><div id="medList"></div></div>
+</section>
+<section id="elder" class="hidden">
+<div class="panel elder-card">
+<div class="pill">TELA SIMPLIFICADA</div>
+<p id="elderPerson" class="note">Para: Minha mãe</p>
+<div id="elderPhoto" class="thumb">💊</div>
+<div class="note">Hora de tomar seu remédio</div>
+<h2 id="elderName">Nenhum medicamento cadastrado</h2>
+<div id="elderDetails" class="details">Cadastre um medicamento na área Familiar.</div>
+<div id="elderTime" class="time">--:--</div>
+<div id="elderStatus" class="pill">Aguardando</div>
+<button class="btn big" id="confirm" disabled>✓ JÁ TOMEI</button>
+<button class="btn secondary" id="speak" style="width:100%;margin-top:9px" disabled>🔊 Ouvir lembrete</button>
+<p class="note">A confirmação é registrada neste protótipo. Ela não substitui a orientação médica.</p>
+</div>
+</section>
+<section id="history" class="hidden">
+<div class="panel"><h2>Histórico de confirmações</h2><div id="historyList" class="note">Ainda não há confirmações.</div><button class="btn secondary" id="clearHistory" style="margin-top:12px">Limpar histórico de demonstração</button></div>
+</section>
+<div class="panel">
+<strong>Importante sobre esta versão</strong>
+<p class="note">Este é um protótipo web para avaliar as telas e o fluxo. A voz é uma demonstração que depende do navegador. Alarmes confiáveis com a tela bloqueada, sincronização entre celulares e avisos remotos à família ainda não estão implementados. Confira sempre medicamento, dose e horário com a receita e um profissional de saúde.</p>
+</div>
+</main>
+<footer>Protótipo de avaliação • Meu Remédio</footer>
+<script>
+const $=id=>document.getElementById(id);
+let meds=JSON.parse(localStorage.getItem('mr_meds')||'[]');
+let history=JSON.parse(localStorage.getItem('mr_history')||'[]');
+let selected=0;
+function persist(){localStorage.setItem('mr_meds',JSON.stringify(meds));localStorage.setItem('mr_history',JSON.stringify(history))}
+function safe(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ $('medList').innerHTML=meds.length?meds.map((m,i)=>`<div class="medicine"><div class="thumb">${m.photo?`<img src="${m.photo}">`:'💊'}</div><div class="medinfo"><strong>${safe(m.name)}</strong><small>${safe(m.color)} • ${safe(m.dose)} • ${safe(m.time)}</small></div><button class="btn secondary" data-select="${i}">Ver</button></div>`).join(''):'<div class="empty">Nenhum medicamento cadastrado ainda.</div>';
+ $('medList').querySelectorAll('[data-select]').forEach(b=>b.onclick=()=>{selected=Number(b.dataset.select);renderElder();showTab('elder')});
+ renderElder();
+ $('historyList').innerHTML=history.length?history.slice().reverse().map(h=>`<div class="history-row"><span><strong>${safe(h.name)}</strong><br><small>${safe(h.person)}</small></span><span>${safe(h.date)}</span></div>`).join(''):'Ainda não há confirmações.';
+}
+function renderElder(){
+ const m=meds[selected];$('elderPerson').textContent='Para: '+($('person').value||'Pessoa idosa');
+ if(!m){$('elderName').textContent='Nenhum medicamento cadastrado';$('elderDetails').textContent='Cadastre um medicamento na área Familiar.';$('elderTime').textContent='--:--';$('elderPhoto').innerHTML='💊';$('elderStatus').textContent='Aguardando';$('confirm').disabled=true;$('speak').disabled=true;return}
+ $('elderName').textContent=m.name;$('elderDetails').textContent=m.color+' • '+m.dose;$('elderTime').textContent=m.time;$('elderPhoto').innerHTML=m.photo?`<img src="${m.photo}">`:'💊';$('elderStatus').textContent=m.taken?'Dose confirmada':'Aguardando confirmação';$('confirm').disabled=!!m.taken;$('speak').disabled=false;$('confirm').textContent=m.taken?'✓ CONFIRMADO':'✓ JÁ TOMEI';
+}
+function showTab(tab){document.querySelectorAll('main section').forEach(s=>s.classList.toggle('hidden',s.id!==tab));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));if(tab==='elder')renderElder();if(tab==='history')render()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$('save').onclick=()=>{
+ const name=$('name').value.trim();if(!name){$('savedMsg').textContent='Informe o nome do medicamento.';return}
+ const file=$('photo').files[0];const add=data=>{meds.push({person:$('person').value.trim()||'Pessoa idosa',name,color:$('color').value.trim()||'Não informada',dose:$('dose').value.trim()||'Conforme cadastro',time:$('time').value||'08:00',frequency:$('frequency').value,photo:data,taken:false});selected=meds.length-1;persist();render();$('savedMsg').textContent='Medicamento salvo neste aparelho.';$('name').value='';$('color').value='';$('dose').value='';$('photo').value=''};
+ if(file){const r=new FileReader();r.onload=()=>add(r.result);r.readAsDataURL(file)}else add('');
+};
+$('confirm').onclick=()=>{const m=meds[selected];if(!m||m.taken)return;m.taken=true;const now=new Date();history.push({name:m.name,person:m.person,date:now.toLocaleString('pt-BR')});persist();render();};
+$('speak').onclick=()=>{const m=meds[selected];if(!m)return;if('speechSynthesis'in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(`Hora de tomar seu remédio. ${m.name}. Cor ${m.color}. Dose ${m.dose}.`))}else alert('A leitura por voz não está disponível neste navegador.')};
+$('clearHistory').onclick=()=>{if(confirm('Limpar o histórico desta demonstração?')){history=[];persist();render()}};
+render();
+</script>
+</body></html>
